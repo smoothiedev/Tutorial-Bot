@@ -9,6 +9,7 @@
   "author": "An Idiot's Guide",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^10.0.1"
+    "discord.js": "^10.0.1",
+    "return-deep-diff": "^0.2.7"
   }
 }
