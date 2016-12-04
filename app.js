@@ -2,12 +2,22 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const token = require('./settings.json').token;
 const ddiff = require('return-deep-diff');
+const chalk = require('chalk');
 client.on('ready', () => {
-  console.log('I\'m Online\nI\'m Online');
+  console.log(chalk.bgGreen.black('I\'m Online\nI\'m Online'));
+});
+
+client.on('disconnect', () =>{
+  console.log(`You have been disconnected at ${new Date()}`);
+});
+
+client.on('reconnecting', () => {
+  console.log(`Reconnecting at ${new Date()}`);
 });
 
 // client.on('',''=>{});
 
+// Guild Events
 client.on('guildDelete', guild => {
   console.log(`I have left ${guild.name} at ${new Date()}`);
 });
@@ -49,14 +59,55 @@ client.on('guildBanRemove',(guild, user) => {
   guild.defaultChannel.sendMessage(`${user.username} was just unbanned!`);
 });
 
+// Client Events
+client.on('channelCreate', channel => {
+  console.log(`A ${channel.type} channel by the name of ${channel.name} was created ${channel.createdAt} with the ID of ${channel.id}`);
+  if (channel.type === 'text') return channel.sendMessage('You were successful in creating this channel.');
+});
+
+client.on('channelDelete', channel => {
+  console.log(`A ${channel.type} by the name of ${channel.name} was successfully deleted.`);
+  channel.guild.defaultChannel.sendMessage('Channel Deleted');
+});
+
+client.on('channelUpdate', (oChannel, nChannel) => {
+  console.log(ddiff(oChannel, nChannel));
+});
+
+client.on('channelPinsUpdate', (channel, time) => {
+  channel.guild.defaultChannel.sendMessage(`The pins for ${channel.name} have been updated at ${time}`);
+});
+
+client.on('messageDelete', msg => {
+  msg.guild.defaultChannel.sendMessage(`A message with the contents ${msg.cleanContent} was deleted from ${msg.channel}`);
+});
+
+client.on('messageDeleteBulk', messages => {
+  console.log(`${messages.size} was deleted`);
+});
+
+// Spammy as hell
+// client.on('typingStart', (channel, user) => {
+//   console.log(`${user.username} has started typing in ${channel.name}`)
+// });
+//
+// client.on('typingStop', (channel, user) => {
+//   console.log(`${user.username} has stopped typing in ${channel.name}`)
+// });
 
 var prefix = "~"
 client.on('message', message => {
   let args = message.content.split(' ').slice(1);
   var result = args.join(' ');
 
+
   if (!message.content.startsWith(prefix)) return;
   if (message.author.bot) return;
+
+  if (message.content.startsWith(prefix + "purge")) {
+    let messagecount = parseInt(result);
+    message.channel.fetchMessages({limit: messagecount}).then(messages => message.channel.bulkDelete(messages));
+  } else
 
   if (message.content.startsWith(prefix + 'join')) {
 		let voiceChan = message.member.voiceChannel;
@@ -83,7 +134,6 @@ client.on('message', message => {
 			}).catch(error => message.channel.sendMessage(error));
 		}
 	}
-
 
   if (message.content.startsWith(prefix + 'ping')) {
     message.channel.sendMessage(`Pong! \`${Date.now() - message.createdTimestamp} ms\``);
@@ -112,5 +162,17 @@ client.on('message', message => {
   }
 });
 
+var regToken = /[\w\d]{24}\.[\w\d]{6}\.[\w\d-_]{27}/g;
+// client.on('debug', e => {
+//   console.log(chalk.bgBlue.green(e.replace(regToken, 'that was redacted')));
+// });
+
+client.on('warn', e => {
+  console.log(chalk.bgYellow(e.replace(regToken, 'that was redacted')));
+});
+
+client.on('error', e => {
+  console.log(chalk.bgRed(e.replace(regToken, 'that was redacted')));
+});
 
 client.login(token);
