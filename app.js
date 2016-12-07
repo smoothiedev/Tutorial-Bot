@@ -17,6 +17,20 @@ client.on('reconnecting', () => {
 
 // client.on('',''=>{});
 
+client.on('roleCreate', role => {
+  let guild = role.guild;
+  guild.defaultChannel.sendMessage(`A new role called ${role.name} has been created`);
+});
+
+client.on('roleDelete', role => {
+  let guild = role.guild;
+  guild.defaultChannel.sendMessage(`A role called ${role.name} has been deleted`);
+});
+
+client.on('roleUpdate', (oRole, nRole) => {
+  console.log(ddiff(oRole, nRole));
+});
+
 // Guild Events
 client.on('guildDelete', guild => {
   console.log(`I have left ${guild.name} at ${new Date()}`);
@@ -95,16 +109,28 @@ client.on('messageDeleteBulk', messages => {
 //   console.log(`${user.username} has stopped typing in ${channel.name}`)
 // });
 
-var prefix = "~"
+var prefix = '~'
 client.on('message', message => {
+  var guild = message.guild;
   let args = message.content.split(' ').slice(1);
   var result = args.join(' ');
-
 
   if (!message.content.startsWith(prefix)) return;
   if (message.author.bot) return;
 
-  if (message.content.startsWith(prefix + "purge")) {
+  if (message.content.startsWith(prefix + 'rolecreate')) {
+    guild.createRole({name:'An Idiot\'s Guide Viewer', color:'#00FFFF', mentionable:true}).catch(error => console.log(error));
+  } else
+
+  if (message.content.startsWith(prefix + 'giverole')) {
+    guild.member(message.mentions.users.first()).addRole('255986750130749451').catch(error => console.log(error));
+  } else
+
+  if (message.content.startsWith(prefix + 'takerole')) {
+    guild.member(message.mentions.users.first()).removeRole('255986750130749451').catch(error => console.log(error));
+  } else
+
+  if (message.content.startsWith(prefix + 'purge')) {
     let messagecount = parseInt(result);
     message.channel.fetchMessages({limit: messagecount}).then(messages => message.channel.bulkDelete(messages));
   } else
