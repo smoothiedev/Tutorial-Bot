@@ -1,3 +1,4 @@
 {
-	"token":"YOURTOKENGOESHERE"
+	"prefix": "YOURPREFIXGOESHERE",
+	"token": "YOURTOKENGOESHERE"
 }
