@@ -1,4 +1,7 @@
 {
+	"ownerid": "YOURUSERID",
+	"modroleid": "YOURMODROLEID",
+	"adminroleid": "YOURADMINROLEID",
 	"prefix": "YOURPREFIXGOESHERE",
 	"token": "YOURTOKENGOESHERE"
 }
