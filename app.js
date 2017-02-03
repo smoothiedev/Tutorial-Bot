@@ -6,8 +6,8 @@ const fs = require('fs');
 const moment = require('moment');
 require('./util/eventLoader')(client);
 
-const log = (msg) => {
-  console.log(`[${moment().format('YYYY-MM-DD HH:mm:ss')}] ${msg}`);
+const log = message => {
+  console.log(`[${moment().format('YYYY-MM-DD HH:mm:ss')}] ${message}`);
 };
 
 client.commands = new Discord.Collection();
@@ -25,7 +25,7 @@ fs.readdir('./commands/', (err, files) => {
   });
 });
 
-client.reload = function(command) {
+client.reload = command => {
   return new Promise((resolve, reject) => {
     try {
       delete require.cache[require.resolve(`./commands/${command}`)];
@@ -45,15 +45,15 @@ client.reload = function(command) {
   });
 };
 
-client.elevation = function(msg) {
+client.elevation = message => {
   /* This function should resolve to an ELEVATION level which
      is then sent to the command handler for verification*/
   let permlvl = 0;
-  let mod_role = msg.guild.roles.find('name', settings.modroleid);
-  if (mod_role && msg.member.roles.has(mod_role.id)) permlvl = 2;
-  let admin_role = msg.guild.roles.find('name', settings.adminroleid);
-  if (admin_role && msg.member.roles.has(admin_role.id)) permlvl = 3;
-  if (msg.author.id === settings.ownerid) permlvl = 4;
+  let mod_role = message.guild.roles.find('name', settings.modrolename);
+  if (mod_role && message.member.roles.has(mod_role.id)) permlvl = 2;
+  let admin_role = message.guild.roles.find('name', settings.adminrolename);
+  if (admin_role && message.member.roles.has(admin_role.id)) permlvl = 3;
+  if (message.author.id === settings.ownerid) permlvl = 4;
   return permlvl;
 };
 

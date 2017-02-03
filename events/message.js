@@ -1,7 +1,5 @@
 const settings = require('../settings.json');
 module.exports = message => {
-  if (!message.content.startsWith(settings.prefix)) return;
-  if (message.author.bot) return;
   let client = message.client;
   if (message.author.bot) return;
   if (!message.content.startsWith(settings.prefix)) return;
