@@ -1,5 +1,6 @@
 # Tutorial-Bot
-This is the bot we're creating in the video series, each branch is an episode number.
+This is the bot we're creating in the video series, each branch represents an episode, master will always be _episode 1_
+![Episodic Branches](http://i.imgur.com/PoeF3fc.gif)
 
-## Repo update schedule
-I will update this repo 2 days after the videos public release.
+## Update schedule
+The repo get's updated 2 days after the public release of the episode.
