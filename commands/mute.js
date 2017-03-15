@@ -12,8 +12,9 @@ exports.run = (client, message, args) => {
     .setColor(0x00AE86)
     .setTimestamp()
     .addField('Action:', 'Un/Mute')
-    .addField('User:', `${user.username}#${user.discriminator}`)
-    .addField('Modrator:', `${message.author.username}#${message.author.discriminator}`);
+    .addField('User:', `${user.username}#${user.discriminator} (${user.id})`)
+    .addField('Modrator:', `${message.author.username}#${message.author.discriminator}`)
+    .addField('Reason', reason);
 
   if (!message.guild.member(client.user).hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) return message.reply('I do not have the correct permissions.').catch(console.error);
 
@@ -39,5 +40,5 @@ exports.conf = {
 exports.help = {
   name: 'mute',
   description: 'mutes or unmutes a mentioned user',
-  usage: 'un/mute [mention]'
+  usage: 'un/mute [mention] [reason]'
 };
