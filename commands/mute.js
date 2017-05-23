@@ -11,20 +11,17 @@ exports.run = (client, message, args) => {
   const embed = new Discord.RichEmbed()
     .setColor(0x00AE86)
     .setTimestamp()
-    .addField('Action:', 'Un/Mute')
-    .addField('User:', `${user.username}#${user.discriminator} (${user.id})`)
-    .addField('Modrator:', `${message.author.username}#${message.author.discriminator}`)
-    .addField('Reason', reason);
+    .setDescription(`**Action:** Un/mute\n**Target:** ${user.tag}\n**Moderator:** ${message.author.tag}\n**Reason:** ${reason}`);
 
   if (!message.guild.member(client.user).hasPermission('MANAGE_ROLES_OR_PERMISSIONS')) return message.reply('I do not have the correct permissions.').catch(console.error);
 
   if (message.guild.member(user).roles.has(muteRole.id)) {
     message.guild.member(user).removeRole(muteRole).then(() => {
-      client.channels.get(modlog.id).sendEmbed(embed).catch(console.error);
+      client.channels.get(modlog.id).send({embed}).catch(console.error);
     });
   } else {
     message.guild.member(user).addRole(muteRole).then(() => {
-      client.channels.get(modlog.id).sendEmbed(embed).catch(console.error);
+      client.channels.get(modlog.id).send({embed}).catch(console.error);
     });
   }
 
@@ -33,7 +30,7 @@ exports.run = (client, message, args) => {
 exports.conf = {
   enabled: true,
   guildOnly: false,
-  aliases: [],
+  aliases: ['unmute'],
   permLevel: 0
 };
 
