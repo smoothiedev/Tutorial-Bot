@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
 exports.run = (client, message, args) => {
-  let reason = args.slice(1).join(' ');
-  let user = message.mentions.users.first();
-  let modlog = client.channels.find('name', 'mod-log');
-  let muteRole = client.guilds.get(message.guild.id).roles.find('name', 'muted');
+  const reason = args.slice(1).join(' ');
+  const user = message.mentions.users.first();
+  const modlog = client.channels.find('name', 'mod-log');
+  const muteRole = client.guilds.get(message.guild.id).roles.find('name', 'muted');
   if (!modlog) return message.reply('I cannot find a mod-log channel').catch(console.error);
   if (!muteRole) return message.reply('I cannot find a mute role').catch(console.error);
   if (reason.length < 1) return message.reply('You must supply a reason for the mute.').catch(console.error);
@@ -31,7 +31,7 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: ['unmute'],
-  permLevel: 0
+  permLevel: 2
 };
 
 exports.help = {
